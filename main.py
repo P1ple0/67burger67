@@ -37,26 +37,21 @@ class App:
         pyxel.cls(0)
         if pyxel.btn(pyxel.KEY_A):
             self.x -= self.speed
-        elif pyxel.btn(pyxel.KEY_D):
-            self.x += self.speed
-        if pyxel.btn(pyxel.KEY_W):
-            self.y -= self.speed
-        elif pyxel.btn(pyxel.KEY_S):
-            self.y += self.speed
-
-        if pyxel.btn(pyxel.KEY_D):
-            self.u = 24
-            self.v = 0
-            self.w = 8
-        elif pyxel.btn(pyxel.KEY_A):
             self.u = 24
             self.v = 0
             self.w = -8
-        elif pyxel.btn(pyxel.KEY_W):
+        elif pyxel.btn(pyxel.KEY_D):
+            self.x += self.speed
+            self.u = 24
+            self.v = 0
+            self.w = 8
+        if pyxel.btn(pyxel.KEY_W):
+            self.y -= self.speed
             self.u = 16
             self.v = 16
             self.w = 8
-        else:
+        elif pyxel.btn(pyxel.KEY_S):
+            self.y += self.speed
             self.u = 16
             self.v = 0
             self.w = 8
@@ -70,18 +65,15 @@ class App:
         elif self.y > pyxel.height - PLAYER_H:
             self.y = pyxel.height - PLAYER_H
 
-        # if self.x == self.bot_x and self.y == self.bot_y:
         if math.dist((self.x, self.y), (self.bot_x, self.bot_y)) < (ANIMAL_W+ANIMAL_H)/2:
             self.score += 1
             self.bot_x = random.randint(0, pyxel.width - ANIMAL_W)
             self.bot_y = random.randint(0, pyxel.height - ANIMAL_H)
             self.bot_u, self.bot_v = random.choice(ANIMALS)
 
-
         if pyxel.frame_count % 5 == 0:
             self.bot_x = random.choice([self.bot_x-1, self.bot_x, self.bot_x+1])
             self.bot_y = random.choice([self.bot_y-1, self.bot_y, self.bot_y+1])
-
 
         if self.bot_x < 0:
             self.bot_x = 0
@@ -98,14 +90,9 @@ class App:
         for (x, y, u, v) in self.flowers:
             pyxel.blt(x=x, y=y, img=0, u=u, v=v, w=8, h=8, colkey=11)
 
-        # pyxel.pset(self.bot_x, self.bot_y, pyxel.COLOR_RED)
         pyxel.blt(x=self.bot_x, y=self.bot_y, img=0, u=self.bot_u, v=self.bot_v, w=8, h=8, colkey=6)
         pyxel.blt(x=self.x, y=self.y, img=0, u=self.u, v=self.v, w=self.w, h=12, colkey=6)
-        #if pyxel.frame_count % 2 < 5:
-        #   pyxel.blt(x=self.x, y=self.y, img=0, u=16, v=0, w=8, h=12, colkey=6)
-        #else:
-        #   pyxel.blt(x=self.x, y=self.y, img=0, u=24, v=0, w=8, h=12, colkey=6)
-        pyxel.text(x=1, y=1, s=str(self.score), col=pyxel.COLOR_WHITE)
+        pyxel.text(x=1, y=1, s=str(self.score), col=pyxel.COLOR_RED)
 
 
 App()
