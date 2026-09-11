@@ -10,7 +10,7 @@ PLAYER_H = 12
 
 class App:
     def __init__(self):
-        pyxel.init(160, 120)
+        pyxel.init(320, 240)
         pyxel.load("data.pyxres")
         self.x = pyxel.width // 2
         self.y = pyxel.height // 2
