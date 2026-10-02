@@ -19,7 +19,10 @@ class Enemies:
     def update(self, state, point_x, point_y):
 
         for i, enemy in enumerate(self.list):
-            enemy.update(self.player.x, self.player.y)
+
+            # Обновляем врага [если он не заморожен]
+            if pyxel.frame_count - state.freeze_started > 200:
+                enemy.update(self.player.x, self.player.y)
 
             # Уничтожаем противника при соприкосновении с оружием
             if check_circle_collision(x1=point_x, y1=point_y, r1=self.player.orb_size, x2=enemy.x+ENEMY_W/2, y2=enemy.y+ENEMY_H/2, r2=ENEMY_W/2):
@@ -40,7 +43,6 @@ class Enemies:
                 state.hp -= 1
                 self.player.attacked = True
 
-        [e.update(self.player.x, self.player.y) for e in self.list]
 
 class Enemy:
     def __init__(self):

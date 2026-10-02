@@ -6,7 +6,8 @@ UPDATES = ['INCREASE\nWALK\nSPEED',
            'INCREASE\nHP',
            'INCREASE\nORB\nSIZE',
            'INCREASE\nORB\nDISTANCE',
-           'INCREASE\nORB\nSPEED'
+           'INCREASE\nORB\nSPEED',
+           'FREEZE\nALL\nENEMIES'
            ]
 
 class State:
@@ -26,8 +27,11 @@ class State:
         self.updates = random.sample(UPDATES, 3)
         self.block = 50
 
-        # Доска достижение
+        # Доска достижений
         self.board = None
+
+        # Параметр для апдейта "заморозка"
+        self.freeze_started = -1000
 
     def draw(self):
 
@@ -78,6 +82,8 @@ class State:
                     self.player.refresh_orb()
                 elif update_index == 4:
                     self.player.orb_speed -= 1
+                elif update_index == 5:
+                    self.freeze_started = pyxel.frame_count
 
                 self.updates = random.sample(UPDATES, 3)
 
