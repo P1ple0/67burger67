@@ -7,18 +7,25 @@ UPDATES = ['INCREASE\nWALK\nSPEED',
            'INCREASE\nORB\nSIZE',
            'INCREASE\nORB\nDISTANCE',
            'INCREASE\nORB\nSPEED',
-           'FREEZE\nALL\nENEMIES'
+           'FREEZE\nALL\nENEMIES',
+           'RESTORE\nFULL\nHP',
+           'TELEPORT\nALL\nENEMIES'
            ]
 
 class State:
-    def __init__(self, player):
+    def __init__(self, player, enemies):
+
+        # Запоминаем переданные данные
         self.player = player
+        self.enemies = enemies
+
         self.state = None
         self.level = 1
         self.score_for_level = 2 ** self.level
         self.score = 0
         self.score_total = 0
         self.hp = 3
+        self.hp_max = self.hp
 
         # Параметры прогресс-бара
         self.w = 0
@@ -74,6 +81,7 @@ class State:
                     self.player.speed += 0.25
                 elif update_index == 1:
                     self.hp += 1
+                    self.hp_max += 1
                 elif update_index == 2:
                     self.player.orb_size += 1
                     self.player.refresh_orb()
@@ -84,6 +92,11 @@ class State:
                     self.player.orb_speed -= 1
                 elif update_index == 5:
                     self.freeze_started = pyxel.frame_count
+                elif update_index == 6:
+                    self.hp = self.hp_max
+                elif update_index == 7:
+                    for enemy in self.enemies.list:
+                        enemy.generate_location()
 
                 self.updates = random.sample(UPDATES, 3)
 

@@ -1,3 +1,4 @@
+import pyxel
 import getpass
 import requests
 import datetime
@@ -22,13 +23,27 @@ def save(level, score):
 
     # Формируем табличку
     results = []
+    colors = {}
+    iterator = iter([pyxel.COLOR_PEACH, pyxel.COLOR_PINK, pyxel.COLOR_YELLOW, pyxel.COLOR_ORANGE])
     items = text.split('\n')
     for i, item in enumerate(items):
         name, date, level, score = item.split('|')
-        score = int(score)
-        results.append({'name': name, 'date': date, 'level': level, 'score': score})
+
+        # Специально для Елисея
+        if name == 'USER':
+            name = 'Elisey'
+
+        # Выбираем цвета текста в зависимости от имени пользователя
         if i == 0:
-            results[-1]['current'] = True
+            color = pyxel.COLOR_RED
+        elif colors.get(name):
+            color = colors[name]
+        else:
+            color = next(iterator)
+            colors[name] = color
+
+        score = int(score)
+        results.append({'name': name, 'date': date, 'level': level, 'score': score, 'color': color})
     results = sorted(results, key=lambda x: x['score'], reverse=True)[:20]
     return results
 
