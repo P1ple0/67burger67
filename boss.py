@@ -18,9 +18,9 @@ class Boss:
         self.u = 0
         self.v = 80
         self.w = 48
-        self.h = 16
-        self.speed = 0.5
-        self.hp = 100
+        self.h = 24
+        self.speed = 0.7
+        self.hp = 200
         self.hp_max = self.hp
 
     def draw(self):
