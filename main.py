@@ -1,14 +1,14 @@
 import pyxel
 import random
 
+import settings
 from state import State
 from player import Player
 from enemies import Enemies
 import scoreboard
 
 """
-ЕЛИСЕЮ: Нарисовать "детей" босса
-ЕЛИСЕЮ: Придумать название игры
+ЕЛИСЕЮ: Придумать название игры: УБВИЖ
 ЕЛИСЕЮ: Нарисовать картинку для обложки
 - Добавить Начальный экран
 - Добавить дополнительные абилки:
@@ -24,6 +24,12 @@ class App:
     def __init__(self):
         pyxel.init(400, 300, display_scale=3)  # 320x200
         pyxel.load("data.pyxres")
+
+        # Загружаем картинку обложки
+        pyxel.images[1].load(0, 0, "image.png")
+        self.x = (pyxel.width-256)/2
+        self.y = (pyxel.height-256)/2
+
         self.font = pyxel.Font("notcourier.ttf", 30)
         self.player = Player()
         self.enemies = Enemies(self.player)
@@ -40,19 +46,36 @@ class App:
 
     def update(self):
 
-        if self.state.state is None:
+        if self.state.screen == settings.SCREEN_START:
+            if pyxel.btn(pyxel.KEY_SPACE):
+                self.player = Player()
+                self.enemies = Enemies(self.player)
+                self.state = State(self.player, self.enemies)
+                self.state.screen = settings.SCREEN_GAME
+
+        elif self.state.screen == settings.SCREEN_GAME:
             if self.state.hp > 0:
-                self.player.update()
-                self.enemies.update(self.state, self.player.points[self.player.point_index][0], self.player.points[self.player.point_index][1])
+                if not self.state.state:
+                    self.player.update()
+                    self.enemies.update(self.state, self.player.points[self.player.point_index][0], self.player.points[self.player.point_index][1])
             else:
-                if pyxel.btn(pyxel.KEY_SPACE):
-                    self.player = Player()
-                    self.enemies = Enemies(self.player)
-                    self.state = State(self.player, self.enemies)
+                self.state.screen = settings.SCREEN_SCORE
+
+        elif self.state.screen == settings.SCREEN_SCORE:
+            if pyxel.btn(pyxel.KEY_SPACE):
+                self.state.screen = settings.SCREEN_START
 
     def draw(self):
 
-        if self.state.hp > 0:
+        if self.state.screen == settings.SCREEN_START:
+            pyxel.cls(pyxel.COLOR_BLACK)
+            pyxel.blt(x=self.x, y=0, img=1, u=0, v=0, w=pyxel.width, h=pyxel.height)
+
+            if pyxel.frame_count % 40 > 20:
+                pyxel.text(x=110, y=pyxel.height-30, s='P r e s s   [ S P A C E ]   t o   s t a r t', col=pyxel.COLOR_YELLOW)
+
+        elif self.state.screen == settings.SCREEN_GAME:
+
             pyxel.cls(pyxel.COLOR_LIME)
 
             for (x, y, u, v) in self.flowers:
@@ -69,7 +92,8 @@ class App:
                 else:
                     pyxel.blt(x=i*20, y=1, img=0, u=32, v=64, w=16, h=16, colkey=pyxel.COLOR_LIGHT_BLUE)
 
-        else:
+        elif self.state.screen == settings.SCREEN_SCORE:
+
             pyxel.cls(pyxel.COLOR_BLACK)
 
             # Если игрок умер, сохраняем его статистику
@@ -79,12 +103,18 @@ class App:
             # pyxel.text(x=50, y=pyxel.height/2-35, s='G A M E  O V E R', col=pyxel.COLOR_RED, font=self.font)
             pyxel.text(x=50, y=10, s='#     Name            Date                         Level           Score', col=pyxel.COLOR_DARK_BLUE)
             pyxel.text(x=50, y=20, s='-'*75, col=pyxel.COLOR_DARK_BLUE)
-            for i, stat in enumerate(self.state.board):
+            for i, stat in enumerate(self.state.board['results']):
 
                 # Вычисляем отступ для формирования ровных столбиков
                 space = (17 - len(stat['name'])) * ' '
 
                 pyxel.text(x=50, y=30+i*10, s=f'{str(i+1).zfill(2)}.   {stat['name']}{space}{stat['date']}          {stat['level']}               {stat['score']}', col=stat['color'])
+
+            if self.state.board['current']['index'] > 10:
+                name = self.state.board['current']['name']
+                space = (17 - len(name)) * ' '
+                pyxel.text(x=50, y=140, s=f'{self.state.board['current']['index']}.   {name}{space}{self.state.board['current']['date']}          {self.state.board['current']['level']}               {self.state.board['current']['score']}', col=self.state.board['current']['color'])
+
             pyxel.text(x=110, y=pyxel.height-40, s='P r e s s   [ S P A C E ]   t o   s t a r t', col=pyxel.COLOR_GREEN)
 
 App()

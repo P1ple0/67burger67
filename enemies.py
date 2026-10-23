@@ -34,6 +34,12 @@ class Enemies:
         if state.level >= settings.BOSS_SHOWS_UP_AFTER_LEVEL and pyxel.frame_count - state.freeze_started > 300 and self.boss.hp > 0:
             self.boss.update(state)
 
+            # Добавляем босовских детенышей
+            if pyxel.frame_count % 100 == 0:
+                self.list.append(Enemy(xy=[self.boss.x+self.boss.w/2-16, self.boss.y+self.boss.h/2-16],
+                                       uv=[48, 80],
+                                       speed=0.8))
+
         # Обычные враги
         for i, enemy in enumerate(self.list):
 
@@ -70,13 +76,25 @@ class Enemies:
 
 
 class Enemy:
-    def __init__(self):
+    def __init__(self, xy=None, uv=None, speed=None):
         self.state = ENEMY_STATE_ALIVE
+
+        if speed:
+            self.speed = speed
+        else:
+            self.speed = random.uniform(0.1, 0.4)
+
         self.x = None
         self.y = None
-        self.generate_location()
-        self.u, self.v = random.choice(ENEMIES)
-        self.speed = random.uniform(0.1, 0.4)
+        if xy:
+            self.x, self.y = xy
+        else:
+            self.generate_location()
+
+        if uv:
+            self.u, self.v = uv
+        else:
+            self.u, self.v = random.choice(ENEMIES)
 
     def generate_location(self):
         offset = random.randint(50, 200)

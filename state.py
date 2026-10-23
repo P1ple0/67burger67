@@ -1,6 +1,9 @@
 import pyxel
 import random
 
+import settings
+
+
 STATE_SELECT_UPDATE = 'STATE_SELECT_UPDATE'
 UPDATES = ['INCREASE\nWALK\nSPEED',
            'INCREASE\nHP',
@@ -14,6 +17,8 @@ UPDATES = ['INCREASE\nWALK\nSPEED',
 
 class State:
     def __init__(self, player, enemies):
+
+        self.screen = settings.SCREEN_START
 
         # Запоминаем переданные данные
         self.player = player

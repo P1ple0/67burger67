@@ -18,9 +18,9 @@ class Boss:
         self.u = 0
         self.v = 80
         self.w = 48
-        self.h = 24
-        self.speed = 0.7
-        self.hp = 200
+        self.h = 32
+        self.speed = 0.4
+        self.hp = 100
         self.hp_max = self.hp
 
     def draw(self):
@@ -73,17 +73,17 @@ class Boss:
 
 
         # Отнимаем у босса жизнь при соприкосновении с оружием
-        if any([helpers.check_circle_collision(x1=self.player.points[self.player.point_index][0], y1=self.player.points[self.player.point_index][1], r1=self.player.orb_size, x2=self.x+8, y2=self.y+8, r2=8),
-                helpers.check_circle_collision(x1=self.player.points[self.player.point_index][0], y1=self.player.points[self.player.point_index][1], r1=self.player.orb_size, x2=self.x+8+16, y2=self.y+8, r2=8),
-                helpers.check_circle_collision(x1=self.player.points[self.player.point_index][0], y1=self.player.points[self.player.point_index][1], r1=self.player.orb_size, x2=self.x+8+32, y2=self.y+8, r2=8)]
+        if any([helpers.check_circle_collision(x1=self.player.points[self.player.point_index][0], y1=self.player.points[self.player.point_index][1], r1=self.player.orb_size, x2=self.x+16, y2=self.y+16, r2=16),
+                helpers.check_circle_collision(x1=self.player.points[self.player.point_index][0], y1=self.player.points[self.player.point_index][1], r1=self.player.orb_size, x2=self.x+24, y2=self.y+16, r2=16),
+                helpers.check_circle_collision(x1=self.player.points[self.player.point_index][0], y1=self.player.points[self.player.point_index][1], r1=self.player.orb_size, x2=self.x+32, y2=self.y+16, r2=16)]
                ):
             self.hp -= 1
 
         # Отнимаем жизни у игрока при столкновении с противником
         if pyxel.frame_count % 20 == 0 and\
-           any([helpers.check_circle_collision(x1=self.player.x+self.player.w/2, y1=self.player.y+self.player.h/2, r1=self.player.orb_size, x2=self.x+8, y2=self.y+8, r2=8),
-                 helpers.check_circle_collision(x1=self.player.x+self.player.w/2, y1=self.player.y+self.player.h/2, r1=self.player.orb_size, x2=self.x+8+16, y2=self.y+8, r2=8),
-                 helpers.check_circle_collision(x1=self.player.x+self.player.w/2, y1=self.player.y+self.player.h/2, r1=self.player.orb_size, x2=self.x+8+32, y2=self.y+8, r2=8)]
+           any([helpers.check_circle_collision(x1=self.player.x+self.player.w/2, y1=self.player.y+self.player.h/2, r1=self.player.orb_size, x2=self.x+16, y2=self.y+16, r2=16),
+                 helpers.check_circle_collision(x1=self.player.x+self.player.w/2, y1=self.player.y+self.player.h/2, r1=self.player.orb_size, x2=self.x+24, y2=self.y+16, r2=16),
+                 helpers.check_circle_collision(x1=self.player.x+self.player.w/2, y1=self.player.y+self.player.h/2, r1=self.player.orb_size, x2=self.x+32, y2=self.y+16, r2=16)]
               ):
             state.hp -= 1
             self.player.attacked = True
