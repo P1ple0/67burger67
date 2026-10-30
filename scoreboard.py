@@ -26,6 +26,7 @@ def save(level, score):
     colors = {}
     iterator = iter([pyxel.COLOR_PEACH, pyxel.COLOR_PINK, pyxel.COLOR_YELLOW, pyxel.COLOR_ORANGE])
     items = text.split('\n')
+    current = {}
     for i, item in enumerate(items):
         name, date, level, score = item.split('|')
 
@@ -44,8 +45,13 @@ def save(level, score):
 
         score = int(score)
         results.append({'name': name, 'date': date, 'level': level, 'score': score, 'color': color})
-    results = sorted(results, key=lambda x: x['score'], reverse=True)[:20]
-    return results
+        if i == 0:
+            current = {'name': name, 'date': date, 'level': level, 'score': score, 'color': color}
+    results = sorted(results, key=lambda x: x['score'], reverse=True)
+    current_index = results.index(current)
+    current['index'] = current_index
+    results = results[:10]
+    return {'results': results, 'current': current}
 
 
 def send_api(text):
