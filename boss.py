@@ -2,6 +2,7 @@ import pyxel
 import random
 
 import helpers
+import settings
 
 
 class Boss:
@@ -20,7 +21,7 @@ class Boss:
         self.w = 48
         self.h = 32
         self.speed = 0.4
-        self.hp = 100
+        self.hp = settings.BOSS_HP
         self.hp_max = self.hp
 
     def draw(self):

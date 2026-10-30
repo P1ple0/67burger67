@@ -55,6 +55,12 @@ class Enemies:
                 state.score_total += 1
                 state.update_progress_bar()
 
+                # Добавляем нового врага
+                self.list.append(Enemy())
+
+                # Перегенеряем старого врага
+                self.list[i] = Enemy()
+
                 if state.level < settings.BOSS_SHOWS_UP_AFTER_LEVEL:
 
                     # Добавляем нового врага
