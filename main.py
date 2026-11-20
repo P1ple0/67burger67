@@ -54,6 +54,10 @@ class App:
                 self.state.screen = settings.SCREEN_GAME
 
         elif self.state.screen == settings.SCREEN_GAME:
+            if pyxel.frame_count % 200 == 0:
+                #pyxel.screenshot()
+                pass
+
             if self.state.hp > 0:
                 if not self.state.state:
                     self.player.update()

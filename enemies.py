@@ -35,7 +35,7 @@ class Enemies:
             self.boss.update(state)
 
             # Добавляем босовских детенышей
-            if pyxel.frame_count % 100 == 0:
+            if pyxel.frame_count % settings.BOSS_BABY_SPAWN_DURATION == 0:
                 self.list.append(Enemy(xy=[self.boss.x+self.boss.w/2-16, self.boss.y+self.boss.h/2-16],
                                        uv=[48, 80],
                                        speed=0.8))
